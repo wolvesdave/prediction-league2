@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  if (!user)
+    a(href="/login") Login
+    br
+    a(href="/register") Register
+  if (user)
+    p You are currently logged in as #{user.email}
+    a(href="/logout") Logout
+    br
+    div(ng-controller="prediction-controller")
+      p
+      input(type="text" name="month" value="#{month}")
+      p
+      input(type="text" name="round" value="#{round}")
+      <prediction-list predictions="predictions"></prediction-list>
