@@ -8,10 +8,13 @@ block content
   if (user)
     p You are currently logged in as #{user.email}
     a(href="/logout") Logout
+    a(href="/") Home
     br
     div(ng-controller="prediction-controller")
       p
-      input(type="text" name="month" value="#{month}")
+      Current Month
+        input(type="text" name="month" value="#{month}")
       p
-      input(type="text" name="round" value="#{round}")
+      Current Round
+        input(type="text" name="round" value="#{round}")
       <prediction-list predictions="predictions"></prediction-list>
