@@ -1,0 +1,27 @@
+<div class="col-sm-12" style="background-color:cyan;">
+    <p>User: {{ user._id }}</p>
+    <p>Round: {{ round }}</p>
+    <p>Month: {{ month }}</p>
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">EMail</th>
+          <th scope="col">Total Score</th>
+          <th scope="col">Monthly Score</th>
+          <th scope="col">Weekly Score</th>
+          <th scope="col">Jokers Remaining</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ user.name }}</td>
+          <td>{{ user._id }}</td>
+          <td>{{ user.totalScore }}</td>
+          <td>{{ user.monthlyScore[0].score }}</td>
+          <td>{{ user.weeklyScore[round-1] }}</td>
+          <td>{{ user.jokersRemaining }}</td>
+        </tr>
+      </tbody>
+    </table>
+</div>

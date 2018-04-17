@@ -1,0 +1,58 @@
+<div class="col-sm-12" style="background-color:cyan;">
+
+<!-- <table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Home Team</th>
+      <th scope="col">Home Score</th>
+      <th scope="col">Home Prediction</th>
+      <th scope="col">Away Team</th>
+      <th scope="col">Away Score</th>
+      <th scope="col">Away Prediction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="prediction in predictions">
+      <td>{{ prediction.homeTeam }}</td>
+      <td>{{ prediction.homeScore }}</th>
+      <td>{{ prediction.homePrediction }}</th>
+      <td>{{ prediction.awayTeam }}</td>
+      <td>{{ prediction.awayScore }}</th>
+      <td>{{ prediction.awayPrediction }}</th>
+    </tr>
+  </tbody>
+</table>
+</div> --->
+
+<form>
+  <div class="form-group">
+
+<div class="row" ng-repeat="prediction in predictions">
+  <div class="col-xs-3">
+    <input type="text" class="form-control" placeholder="{{ prediction.homeTeam }}" disabled>
+  </div>
+  <div class="col-xs-1">
+    <input type="text" class="form-control" placeholder="{{ prediction.homePrediction }}" >
+  </div>
+  <div class="col-xs-3">
+    <input type="text" class="form-control" placeholder="{{ prediction.awayTeam }}" disabled>
+  </div>
+  <div class="col-xs-1">
+    <input type="text" class="form-control" placeholder="{{ prediction.awayPrediction }}" >
+  </div>
+  <div class="col-xs-1">
+    <input type="text" class="form-control" placeholder="{{ prediction.homeScore }}" disabled>
+  </div>
+  <div class="col-xs-1">
+    <input type="text" class="form-control" placeholder="{{ prediction.awayScore }}" disabled>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Joker?
+    </label>
+  </div>
+</div>
+
+</div>
+<button type="submit" class="btn btn-default">Submit</button>
+</form>

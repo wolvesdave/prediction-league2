@@ -9,4 +9,11 @@ block content
     p You are currently logged in as #{user.email}
     a(href="/logout") Logout
     br
-    a(href="/api/sysparms") Sysparms
+    div(ng-controller="predictionController")
+      p
+      Current Month
+        input(type="text" name="month" value="#{month}" ng-model=month)
+      p
+      Current Round
+        input(type="text" name="round" value="#{round}" ng-model=month)
+      <prediction-list predictions="predictions"></prediction-list>
