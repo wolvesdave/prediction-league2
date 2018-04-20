@@ -47,6 +47,15 @@ router.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
+router.get('/predictions', function(req, res) {
+    res.render('predictions', { user : req.user });
+});
+
+router.post('/predictions', function(req, res) {
+    console.log("req: ", req.body);
+//    res.render('predictions', { user : req.user });
+});
+
 router.get('/api/sysparms', function(req, res) {
     /* Get System parameters */
   Sysparms.findOne({}).lean().exec(function (err, sysparms) {

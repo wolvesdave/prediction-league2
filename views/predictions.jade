@@ -1,0 +1,52 @@
+extends layout
+
+block content
+    if (!user)
+      a(href="/login") Login
+      br
+      a(href="/register") Register
+    if (user)
+      a(href="/predictions") Predictions
+      br
+      a(href="/table") Table
+      p You are currently logged in as #{user.email}
+      a(href="/logout") Logout
+      br
+
+      form(role='form', action="/predictions", method="post")
+        div(ng-controller="predictionController")
+          .form-group
+            Current Month
+              input(type="text" name="month" value="#{month}" ng-model="month")
+          .form-group
+            Current Round
+              input(type="text" name="round" value="#{round}" ng-model="round")
+          .form-group
+            div(class="col-xs-3") Home Team
+            div(class="col-xs-1") Prediction
+            div(class="col-xs-3") Away Team
+            div(class="col-xs-1") Prediction
+            div(class="col-xs-1") Actual
+            div(class="col-xs-1") Score
+            div(class="col-xs-1") Joker
+          br
+          .form-group
+            div(ng-repeat="prediction in predictions")
+              div(class="col-xs-3")
+                input(type="text" class="form-control" name="homeTeam" placeholder="{{ prediction.homeTeam }}" readonly)
+              div(class="col-xs-1")
+                input(type="text" class="form-control" name="homePrediction" placeholder="{{ prediction.homePrediction }}")
+              div(class="col-xs-3")
+                input(type="text" class="form-control" name="awayTeam" placeholder="{{ prediction.awayTeam }}" readonly)
+              div(class="col-xs-1")
+                input(type="text" class="form-control" name="awayPrediction" placeholder="{{ prediction.awayPrediction }}")
+              div(class="col-xs-1")
+                input(type="text" class="form-control" name="homeScore" placeholder="{{ prediction.homeScore }}" readonly)
+              div(class="col-xs-1")
+                input(type="text" class="form-control" name="awayScore" placeholder="{{ prediction.awayScore }}" readonly)
+              div(class="checkbox")
+                label
+                  input(type="hidden" name="joker" value="0")
+                  input(type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value")
+          br
+          button.btn.btn-default(type='submit') Submit

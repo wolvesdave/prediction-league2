@@ -17,11 +17,16 @@ predictionApp.controller('predictionController', ['$scope', '$filter', '$http', 
           console.log(result);
           $scope.predictions = result;
 
-      })
+      });
+
+    $scope.submitForm = function(theForm)
+    {
+        console.log("and the form is ", theForm);
+    }
+    })
       .error(function (data, status) {
 
           console.log(data);
 
     });
-});
 }]);

@@ -6,14 +6,9 @@ block content
     br
     a(href="/register") Register
   if (user)
+    a(href="/predictions") Predictions
+    br
+    a(href="/table") Table
     p You are currently logged in as #{user.email}
     a(href="/logout") Logout
-    br
-    div(ng-controller="predictionController")
-      p
-      Current Month
-        input(type="text" name="month" value="#{month}" ng-model=month)
-      p
-      Current Round
-        input(type="text" name="round" value="#{round}" ng-model=month)
-      <prediction-list predictions="predictions"></prediction-list>
+    
