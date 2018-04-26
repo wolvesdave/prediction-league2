@@ -20,7 +20,7 @@ block content
               input(type="text" name="month" value="#{month}" ng-model="month")
           .form-group
             Current Round
-              input(type="text" name="round" value="#{round}" ng-model="round")
+              input(type="number" name="round" value="#{round}" ng-model="round")
           .form-group
             div(class="col-xs-3") Home Team
             div(class="col-xs-1") Prediction
@@ -33,17 +33,17 @@ block content
           .form-group
             div(ng-repeat="prediction in predictions")
               div(class="col-xs-3")
-                input(type="text" class="form-control" name="homeTeam" placeholder="{{ prediction.homeTeam }}" readonly)
+                input(type="text" class="form-control" name="homeTeam" value="{{ prediction.homeTeam }}" readonly required)
               div(class="col-xs-1")
-                input(type="text" class="form-control" name="homePrediction" placeholder="{{ prediction.homePrediction }}")
+                input(type="number" class="form-control" name="homePrediction" value="{{ prediction.homePrediction }}" required)
               div(class="col-xs-3")
-                input(type="text" class="form-control" name="awayTeam" placeholder="{{ prediction.awayTeam }}" readonly)
+                input(type="text" class="form-control" name="awayTeam" value="{{ prediction.awayTeam }}" readonly required)
               div(class="col-xs-1")
-                input(type="text" class="form-control" name="awayPrediction" placeholder="{{ prediction.awayPrediction }}")
+                input(type="number" class="form-control" name="awayPrediction" value="{{ prediction.awayPrediction }}" required)
               div(class="col-xs-1")
-                input(type="text" class="form-control" name="homeScore" placeholder="{{ prediction.homeScore }}" readonly)
+                input(type="number" class="form-control" name="homeScore" value="{{ prediction.homeScore }}" readonly required)
               div(class="col-xs-1")
-                input(type="text" class="form-control" name="awayScore" placeholder="{{ prediction.awayScore }}" readonly)
+                input(type="number" class="form-control" name="awayScore" value="{{ prediction.awayScore }}" readonly required)
               div(class="checkbox")
                 label
                   input(type="hidden" name="joker" value="0")

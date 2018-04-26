@@ -7,7 +7,7 @@ predictionApp.controller('predictionController', ['$scope', '$filter', '$http', 
     $http.get('http://localhost:3000/api/sysparms')
       .success(function (result) {
 
-        $scope.email = result.user;
+        $scope.email = result.email;
         $scope.round = result.sysparms.currentRound;
         $scope.month = result.sysparms.currentMonth;
 
@@ -19,10 +19,6 @@ predictionApp.controller('predictionController', ['$scope', '$filter', '$http', 
 
       });
 
-    $scope.submitForm = function(theForm)
-    {
-        console.log("and the form is ", theForm);
-    }
     })
       .error(function (data, status) {
 

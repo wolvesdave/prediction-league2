@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
 
-var Predictions = new Schema({
+var Fixtures = new Schema({
     email: String,
     name: String,
     homeTeam: String,
@@ -12,4 +12,4 @@ var Predictions = new Schema({
     Round: Number
 });
 
-module.exports = mongoose.model('Predictions', Predictions);
+module.exports = mongoose.model('Fixtures', Fixtures);
