@@ -1,25 +1,26 @@
 var MongoClient = require('mongodb').MongoClient,
-    fs = require('fs'),
     assert = require('assert'),
     parseString = require('xml2js').parseString,
     request = require('request'),
-    http = require('http');
-
-http.post = require('http-post');
+    http = require('http'),
+    post = require('http-post'),
+    fixtureData = '';
 
     payload = {
       'ApiKey':'QQQMPBBYBPJYCVJCBHFRQMFVOCOSLBPPCXVGWLRKRRKAEACUXC',
       'seasonDateString':'1718',
       'league':'Scottish Premier League',
-		'startDateString' : '2018-01-01',
-		'endDateString' : '2018-07-31'
+      'startDateString': '2017-12-01',
+      'endDateString' : '2017-12-31'
     };
 
-MongoClient.connect('mongodb://localhost:27017/predictionleague', function(err, db) {
+MongoClient.connect('mongodb://localhost:27017', function(err, client) {
 
-/*  http.post('http://www.xmlsoccer.com/FootballDataDemo.asmx/GetFixturesByLeagueAndSeason', */
+  assert.equal(null, err);
+  console.log("Connected successfully to server");
+  const db = client.db("prediction-league");
 
-  http.post('http://www.xmlsoccer.com/FootballDataDemo.asmx/GetFixturesByDateIntervalAndLeague',
+  post('http://www.xmlsoccer.com/FootballDataDemo.asmx/GetFixturesByDateIntervalAndLeague',
   payload, function(res){
 
       console.log(`STATUS: ${res.statusCode}`);
@@ -28,9 +29,19 @@ MongoClient.connect('mongodb://localhost:27017/predictionleague', function(err, 
 
       res.on('data', function(chunk) {
 
-        console.log("Here's a chunk: ", chunk);
+        console.log("Adding a chunk... ");
+        fixtureData+= chunk;
 
-        parseString(chunk, function (err, result) {
+      });
+
+      res.on('end',function() {
+
+        parseString(fixtureData, function (err, result) {
+
+          if(err) {
+              console.log('Unknown Error');
+              return;
+            }
 
             var inputmatches = result["XMLSOCCER.COM"].Match,
                 outputmatches = [];
@@ -62,7 +73,7 @@ MongoClient.connect('mongodb://localhost:27017/predictionleague', function(err, 
               outputmatches.push(match);
             };
 
-            console.log(outputmatches); 
+            /* console.log(outputmatches); */
 
             db.collection('fixtures').insertMany(outputmatches, function(err, r) {
 

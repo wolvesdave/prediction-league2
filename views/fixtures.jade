@@ -14,7 +14,12 @@ block content
       p You are currently logged in as #{user.email}
       a(href="/logout") Logout
       br
-
+      .form-group
+        Start Date
+          input(type="date" name="startDate" ng-model="startDate")
+      .form-group
+        End Date
+          input(type="date" name="endDate" ng-model="endDate")
       form(ng-submit="submit()", ng-controller="fixtureController")
           .form-group
             Current Month
