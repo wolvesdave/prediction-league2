@@ -3,14 +3,14 @@ var passport = require('passport');
 var Account = require('../models/account');
 var Sysparms = require('../models/sysparms');
 var Prediction = require('../models/prediction');
+var Fixture = require('../models/fixture');
 var router = express.Router();
 
 router.get('/', function (req, res) {
-  Sysparms.findOne({}).lean().exec(function (err, sysparms) {
-    if (err) return console.error(err);
+  // Sysparms.findOne({}).lean().exec(function (err, sysparms) {
+  //   if (err) return console.error(err);
     res.render('index', {user : req.user});
-  });
-//    res.render('index', { user : req.user , username : "wiggy", round : 1});
+  // });
 });
 
 router.get('/register', function(req, res) {
@@ -39,6 +39,11 @@ router.get('/login', function(req, res) {
 });
 
 router.post('/login', passport.authenticate('local'), function(req, res) {
+    Sysparms.findOne({}).lean().exec(function (err, sysparms) {
+      if (err) return console.error(err);
+      res.sysparms = sysparms;
+      console.log("Login sysparms result: ", sysparms);
+    });
     res.redirect('/predictions');
 });
 
@@ -48,105 +53,67 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/predictions', function(req, res) {
-    res.render('predictions', { user : req.user });
+    res.render('predictions', { user : req.user});
 });
 
-router.post('/predictions', function(req, res) {
-    var query = {"email" : req.user.email, "Round": parseInt(req.body.round)};
+router.get('/fixtures', function(req, res) {
+    res.render('fixtures', { user : req.user});
+});
 
-    console.log("POST predictions input: body ", req.body, "user ", req.user, "query: ", query);
+router.get('/api/get_predictions/:round', function(req, res, next) {
+  console.log("GET get_predictions input: ", req.user.email, " ", req.params.round);
+  var email = req.user.email;
+  var round = req.params.round;
+  Prediction.findOne({"email" : email, "Round": round}).lean().exec(function (err, result) {
+    if (err) return console.error(err);
+    console.log("GET get_predictions result:", result);
+    res.send(result);
+  });
 
-    pred = [];
+});
 
-    for (i = 0; i < req.body.homeTeam.length; i++) {
+router.post('/api/put_predictions', function(req, res) {
+    var query = {"email" : req.user.email, "Round": parseInt(req.body.Round)};
+    var newPrediction = req.body.prediction;
 
-      var joker = new Boolean(req.body.joker[i] == '1');
+    console.log("POST predictions input: newPrediction ", req.body.newPrediction, "user ", req.user, "query: ", query);
 
-      console.log("Adding this prediction: ",
-      "homeTeam", req.body.homeTeam[i],
-      "homePrediction", req.body.homePrediction[i],
-      "awayTeam", req.body.awayTeam[i],
-      "awayPrediction", req.body.awayPrediction[i],
-      "joker", joker
-    );
-
-      n = pred.push(
-        {"homeTeam" : req.body.homeTeam[i],
-        "homePrediction" : req.body.homePrediction[i],
-        "awayTeam" : req.body.awayTeam[i],
-        "awayPrediction" : req.body.awayPrediction[i],
-        "joker" : joker}
-      );
-      console.log("predictions now ", n, " long", pred);
-    };
-
-    console.log("Attempting to modify prediction: ", pred, "using query ", query);
-
-    Prediction.update(query, {
-      $set: {predictions: pred}
-      },
+    Prediction.update(query, newPrediction,
       {overwrite: true},
       function(err, result) {
         if (err) return console.error(err);
         console.log("Modified prediction: ", result);
+        res.send(result);
     });
 
-    res.redirect('/predictions');
+});
 
+router.get('/api/get_fixtures/:round', function(req, res, next) {
+  console.log("GET get_fixtures input: ", req.params.round);
+  var round = req.params.round;
+  Fixture.findOne({"Round": round}).lean().exec(function (err, result) {
+    if (err) return console.error(err);
+    console.log("GET get_fixtures result:", result);
+    res.send(result);
+  });
+
+});
+
+router.post('/api/put_fixtures', function(req, res) {
+    var query = {"Round": parseInt(req.body.Round)};
+    var newFixture = req.body;
+
+    console.log("POST fixtures input: newFixture ", newFixture, "query: ", query);
+
+    Fixture.update(query, newFixture,
+      {overwrite: true, upsert : true},
+      function(err, result) {
+        if (err) return console.error(err);
+        console.log("Modified fixture: ", result);
+        res.send(result);
     });
-    //       "$set": {"predictions": pred},
-    //   Prediction.findOne(query, function (err, result) {
-    //   if (err) return console.error(err);
-    //   console.log("POST predictions findOne result: ", result);
-    //
-    //   result.predictions = [];
-    //
-    //   console.log("predictions is now: ", result.predictions, " ", result);
-    //
-    //   for (i = 0; i < req.body.homeTeam.length; i++) {
-    //
-    //     console.log("Adding this prediction: ",
-    //     "homeTeam", req.body.homeTeam[i],
-    //     "homePrediction", req.body.homePrediction[i],
-    //     "awayTeam", req.body.awayTeam[i],
-    //     "awayPrediction", req.body.awayPrediction[i],
-    //     "joker", req.body.joker[i]
-    //   );
-    //
-    //     n = result.predictions.push(
-    //       {"homeTeam" : req.body.homeTeam[i],
-    //       "homePrediction" : req.body.homePrediction[i],
-    //       "awayTeam" : req.body.awayTeam[i],
-    //       "awayPrediction" : req.body.awayPrediction[i],
-    //       "joker" : req.body.joker[i],}
-    //     );
-    //     console.log("predictions now ", n, " long", result.predictions);
-    //   };
-    //
-    //   console.log("Attempting to modify prediction: ", result.predictions);
-    //
-    //   result.save(function(err, result) {
-    //     if (err) return console.error(err);
-    //     console.log("Modified prediction: ", result);
-    //   });
-    //
-    //
-    //   // Prediction.findOneAndUpdate(query, { predictions : predictions }, {upsert:true, overwrite:true}, function(err, doc){
-    //   //     if (err) return console.error("Save Failed: ", err);
-    //   //     console.log("Save worked!", doc);
-    //
-    //   res.redirect('/predictions')
-    //
-    // });
 
-    // var pred = new Prediction( {email : req.user.email, name : req.user.username, Round : req.body.round});
-    // pred.save(function (err, pred, numAffected) {
-    //   if (err) {
-    //     console.log("Shit");
-    //   }
-    //   console.log("Saved ", numAffected, " : ", pred);
-    //   res.redirect('/predictions');
-    // })
+});
 
 router.get('/api/sysparms', function(req, res) {
     /* Get System parameters */
@@ -157,19 +124,6 @@ router.get('/api/sysparms', function(req, res) {
     console.log("GET sysparms result: ", result);
     res.send(result);
   });
-});
-
-router.get('/api/get_predictions/:email/:round', function(req, res, next) {
-  console.log("GET get_predictions input: ", req.params.email, " ", req.params.round);
-  // var user = req.body.user;
-  var email = req.params.email;
-  var round = req.params.round;
-  Prediction.findOne({"email" : email, "Round": round},{_id : 0, predictions : 1}).lean().exec(function (err, result) {
-    if (err) return console.error(err);
-    console.log("GET get_predictions result:", result.predictions);
-    res.send(result.predictions);
-  });
-
 });
 
 router.get('/ping', function(req, res){

@@ -166,3 +166,36 @@ query = { email: 'wolvesdave@gmail.com', Round: 1 }
 		}
 	]
 }
+
+input(type="hidden" name="joker" value="0")
+input(type="checkbox" onclick="this.previousSibling.value=1-this.previousSibling.value")
+
+form(role='form', action="/predictions", method="post")
+  div(ng-controller="predictionController")
+
+  db.predictions.find({}).forEach( function(doc) {
+  var arr = doc.predictions;
+  var length = arr.length;
+  for (var i = 0; i < length; i++) {
+    delete arr[i]["_id"];
+  }
+  db.predictions.save(doc);
+});
+
+db.predictions.findOneAndUpdate({email: "wolvesdave@gmail.com"},{$set: {
+"predictions" : [
+  {
+    "homeTeam" : "Arsenal",
+    "homePrediction" : 3,
+    "awayTeam" : "Everton",
+    "awayPrediction" : 1,
+    "joker" : true
+  },
+  {
+    "homeTeam" : "Wolves",
+    "homePrediction" : 5,
+    "awayTeam" : "Villa",
+    "awayPrediction" : 1,
+    "joker" : false
+  }
+]}});

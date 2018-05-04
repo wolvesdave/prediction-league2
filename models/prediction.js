@@ -6,7 +6,8 @@ var Prediction = new Schema({
     name: String,
     Round: Number,
     predictions: [
-      {homeTeam: String,
+      {_id : false,
+      homeTeam: String,
       homeScore: Number,
       homePrediction: Number,
       awayTeam: String,

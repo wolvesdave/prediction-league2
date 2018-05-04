@@ -1,0 +1,42 @@
+extends layout
+
+block content
+    if (!user)
+      a(href="/login") Login
+      br
+      a(href="/register") Register
+    if (user)
+      a(href="/predictions") Predictions
+      br
+      a(href="/table") Table
+      br
+      a(href="/fixtures") Fixtures
+      p You are currently logged in as #{user.email}
+      a(href="/logout") Logout
+      br
+
+      form(ng-submit="submit()", ng-controller="fixtureController")
+          .form-group
+            Current Month
+              input(type="text" name="month" value="#{month}" ng-model="month")
+              button(type="button" ng-click="changeMonth()") Go
+          .form-group
+            Current Round
+              input(type="number" name="round" value="#{round}" ng-model="round")
+              button(type="button" ng-click="changeRound()") Go
+          .form-group
+            div(class="col-xs-3") Home Team
+            div(class="col-xs-3") Away Team
+          br
+          .form-group
+            div(ng-repeat="fixture in fixture.fixtures" ng-submit="submit()")
+              div(class="row")
+                div(class="col-xs-3")
+                  input(type="text" class="form-control" name="homeTeam" value="{{ fixture.homeTeam }}" ng-model="fixture.homeTeam" required)
+                div(class="col-xs-3")
+                  input(type="text" class="form-control" name="awayTeam" value="{{ fixture.awayTeam }}" ng-model="fixture.awayTeam" required)
+          br
+          div(class="button-box col-lg-12")
+            button.btn.btn-default(type="button" ng-click="addMatch()") Add
+            button.btn.btn-default(type='submit') Save
+            button.btn.btn-default(type="button" ng-click="populateFixtures()") Populate
