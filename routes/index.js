@@ -1,10 +1,15 @@
-var express = require('express');
-var passport = require('passport');
-var Account = require('../models/account');
-var Sysparms = require('../models/sysparms');
-var Prediction = require('../models/prediction');
-var Fixture = require('../models/fixture');
-var router = express.Router();
+var express = require('express'),
+    passport = require('passport'),
+    Account = require('../models/account'),
+    Sysparms = require('../models/sysparms'),
+    Prediction = require('../models/prediction'),
+    Fixture = require('../models/fixture'),
+    assert = require('assert'),
+    parseString = require('xml2js').parseString,
+    request = require('request'),
+    http = require('http'),
+    post = require('http-post'),
+    router = express.Router()
 
 router.get('/', function (req, res) {
   // Sysparms.findOne({}).lean().exec(function (err, sysparms) {
@@ -85,18 +90,16 @@ router.post('/api/put_predictions', function(req, res) {
         console.log("Modified prediction: ", result);
         res.send(result);
     });
-
 });
 
 router.get('/api/get_fixtures/:round', function(req, res, next) {
   console.log("GET get_fixtures input: ", req.params.round);
   var round = req.params.round;
-  Fixture.findOne({"Round": round}).lean().exec(function (err, result) {
+  Fixture.find({"Round": round}).lean().exec(function (err, result) {
     if (err) return console.error(err);
     console.log("GET get_fixtures result:", result);
     res.send(result);
   });
-
 });
 
 router.post('/api/put_fixtures', function(req, res) {
@@ -114,6 +117,58 @@ router.post('/api/put_fixtures', function(req, res) {
     });
 
 });
+
+router.post('/api/populate_fixtures', function(req,res) {
+    var startDate = req.body.startDate;
+    var endDate = req.body.endDate;
+
+    var payload = {
+      "ApiKey":"QQQMPBBYBPJYCVJCBHFRQMFVOCOSLBPPCXVGWLRKRRKAEACUXC",
+      "seasonDateString":"1718",
+      "league":"Scottish Premier League",
+      "startDateString" : startDate,
+      "endDateString" : endDate
+    };
+
+    console.log("payload = ", payload);
+});
+    // post('http://www.xmlsoccer.com/FootballDataDemo.asmx/GetFixturesByDateIntervalAndLeague',
+    // payload, function(res) {
+    //     if (!result) {
+    //       console.log("Fixing null result");
+    //       $scope.fixture = {Round : $scope.round, fixtures:[]}
+    //     } else {
+    //       console.log("Received from get_fixtures: ", result);
+    //
+    //       $scope.fixture = {Round : $scope.round, fixtures:[]};
+    //
+    //       for (var i = 0, len = result.length; i < len; i++) {
+    //         /* console.log("Mapping match ID ", [i].Id[0]); */
+    //         if (result[i].HomeTeam) {
+    //           HomeGoals = parseInt(result[i].HomeGoals[0])
+    //         } else {
+    //           HomeGoals = ""
+    //         }
+    //         if ([i].AwayGoals) {
+    //           AwayGoals = parseInt(result[i].AwayGoals[0])
+    //         } else {
+    //           AwayGoals = ""
+    //         }
+    //         console.log("adding match: ", match);
+    //         match = {
+    //             "_id" : result[i].Id[0],
+    //             "Date" : result[i].Date[0],
+    //             "HomeTeam" : result[i].HomeTeam[0],
+    //             "HomeGoals" : homegoals,
+    //             "AwayTeam" : result[i].AwayTeam[0],
+    //             "AwayGoals" : awaygoals,
+    //             "Location" : result[i].Location[0]
+    //           }
+    //         };
+    //         $scope.fixture.fixtures.push(match);
+    //       }
+    //   })
+
 
 router.get('/api/sysparms', function(req, res) {
     /* Get System parameters */

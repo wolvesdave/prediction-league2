@@ -199,3 +199,56 @@ db.predictions.findOneAndUpdate({email: "wolvesdave@gmail.com"},{$set: {
     "joker" : false
   }
 ]}});
+
+> db.fixtures.find().pretty()
+{ "_id" : ObjectId("5aea4b2ed2cefab7a3033ce0"), "fixtures" : [ ] }
+{
+	"_id" : ObjectId("5aea4e73d2cefab7a3033ce1"),
+	"Round" : 1,
+	"fixtures" : [
+		{
+			"homeTeam" : "wolves",
+			"awayTeam" : "villa"
+		},
+		{
+			"homeTeam" : "Man U",
+			"awayTeam" : "Arsenal"
+		},
+		{
+			"homeTeam" : "Chelseas",
+			"awayTeam" : "Burnley"
+		}
+	]
+}
+{
+	"_id" : ObjectId("5aeb709e4b8bb31dcce444f2"),
+	"Round" : 2,
+	"fixtures" : [
+		{
+			"homeTeam" : "a",
+			"awayTeam" : "v"
+		},
+		{
+			"homeTeam" : "d",
+			"awayTeam" : "c"
+		}
+	],
+	"__v" : 0
+}
+>
+[
+  {"_id":"380441","Round":19,"Date":"2017-12-17T12:30:00+00:00","HomeTeam":"Hearts","HomeGoals":4,"AwayTeam":"Celtic","AwayGoals":0,"Location":"Tynecastle Stadium"},
+  {"_id":"380443","Round":19,"Date":"2017-12-16T15:00:00+00:00","HomeTeam":"Rangers","HomeGoals":1,"AwayTeam":"St Johnstone","AwayGoals":3,"Location":"Ibrox Stadium"},
+  {"_id":"380442","Round":19,"Date":"2017-12-16T15:00:00+00:00","HomeTeam":"Kilmarnock","HomeGoals":1,"AwayTeam":"Motherwell","AwayGoals":0,"Location":"Rugby Park"},
+  {"_id":"380440","Round":19,"Date":"2017-12-16T15:00:00+00:00","HomeTeam":"Hamilton","HomeGoals":3,"AwayTeam":"Ross County","AwayGoals":2,"Location":"New Douglas Park"},
+  {"_id":"380439","Round":19,"Date":"2017-12-16T15:00:00+00:00","HomeTeam":"Dundee FC","HomeGoals":3,"AwayTeam":"Partick","AwayGoals":0,"Location":"Dens Park"},
+  {"_id":"380438","Round":19,"Date":"2017-12-16T12:30:00+00:00","HomeTeam":"Aberdeen","HomeGoals":4,"AwayTeam":"Hibernian","AwayGoals":1,"Location":"Pittodrie Stadium"}
+]
+
+.error(function (data, status) {
+    console.log(data);
+});
+
+.error(function (data, status) {
+    console.log(data);
+});

@@ -16,10 +16,10 @@ block content
       br
       .form-group
         Start Date
-          input(type="date" name="startDate" ng-model="startDate")
+          input(type="string" name="startDate" ng-model="startDate")
       .form-group
         End Date
-          input(type="date" name="endDate" ng-model="endDate")
+          input(type="string" name="endDate" ng-model="endDate")
       form(ng-submit="submit()", ng-controller="fixtureController")
           .form-group
             Current Month

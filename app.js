@@ -8,6 +8,11 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var assert = require('assert');
+var parseString = require('xml2js').parseString;
+var request = require('request');
+var http = require('http');
+var post = require('http-post');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
