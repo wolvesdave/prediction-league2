@@ -6,7 +6,10 @@ var Fixture = new Schema({
     fixtures: [
       {_id : false,
       homeTeam: String,
-      awayTeam: String}
+      homeScore: Number,
+      awayTeam: String
+      awayScore: Number,
+      matchDate: Date}
     ]
 });
 
