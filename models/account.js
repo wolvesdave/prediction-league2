@@ -6,7 +6,13 @@ var Account = new Schema({
     username: String,
     fullname: String,
     password: String,
-    email : String
+    email : String,
+    totalScore : Number,
+    weeklyScore : [ score : Number ],
+    monthlyScore : [
+      month : String,
+      score : Number
+     ]
 });
 
 Account.plugin(passportLocalMongoose);

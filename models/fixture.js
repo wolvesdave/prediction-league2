@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var Fixture = new Schema({
     Round: Number,
+    roundClosed: Boolean,
     fixtures: [
       {_id : false,
       homeTeam: String,
