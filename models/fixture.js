@@ -2,16 +2,15 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Fixture = new Schema({
-    Round: Number,
-    roundClosed: Boolean,
-    fixtures: [
-      {_id : false,
-      homeTeam: String,
-      homeScore: Number,
-      awayTeam: String
-      awayScore: Number,
-      matchDate: Date}
-    ]
+      _id : String,
+      Round: Number,
+      Date: Date,
+      // roundClosed: Boolean,
+      HomeTeam: String,
+      HomeGoals: Number,
+      AwayTeam: String,
+      AwayGoals: Number,
+      Location: String
 });
 
 module.exports = mongoose.model('Fixture', Fixture);

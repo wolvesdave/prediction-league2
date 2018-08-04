@@ -14,19 +14,19 @@ block content
       p You are currently logged in as #{user.email}
       a(href="/logout") Logout
       br
-      .form-group
-        Start Date
-          input(type="string" name="startDate" ng-model="startDate")
-      .form-group
-        End Date
-          input(type="string" name="endDate" ng-model="endDate")
       form(ng-submit="submit()", ng-controller="fixtureController")
           .form-group
-            Current Month
+            label Start Date
+              input(type="string" name="startDate" ng-model="startDate")
+          .form-group
+            label End Date
+              input(type="string" name="endDate" ng-model="endDate")
+          .form-group
+            label Current Month
               input(type="text" name="month" value="#{month}" ng-model="month")
               button(type="button" ng-click="changeMonth()") Go
           .form-group
-            Current Round
+            label Current Round
               input(type="number" name="round" value="#{round}" ng-model="round")
               button(type="button" ng-click="changeRound()") Go
           .form-group
@@ -34,12 +34,12 @@ block content
             div(class="col-xs-3") Away Team
           br
           .form-group
-            div(ng-repeat="fixture in fixture.fixtures" ng-submit="submit()")
+            div(ng-repeat="fixture in fixtures" ng-submit="submit()")
               div(class="row")
                 div(class="col-xs-3")
-                  input(type="text" class="form-control" name="homeTeam" value="{{ fixture.homeTeam }}" ng-model="fixture.homeTeam" required)
+                  input(type="text" class="form-control" name="homeTeam" value="{{ fixture.HomeTeam }}" ng-model="fixture.HomeTeam" required)
                 div(class="col-xs-3")
-                  input(type="text" class="form-control" name="awayTeam" value="{{ fixture.awayTeam }}" ng-model="fixture.awayTeam" required)
+                  input(type="text" class="form-control" name="awayTeam" value="{{ fixture.AwayTeam }}" ng-model="fixture.AwayTeam" required)
           br
           div(class="button-box col-lg-12")
             button.btn.btn-default(type="button" ng-click="addMatch()") Add

@@ -29,10 +29,14 @@ predictionApp.controller('fixtureController', ['$scope', '$filter', '$http', fun
 
     $scope.populateFixtures = function(startDate, endDate) {
       data = {"startDate" : startDate, "endDate" : endDate};
-      console.log("In populateFixtures; start ", startDate, "end ", endDate, "data ", data);
+      console.log("In populateFixtures: data ", data);
       $http.post('http://localhost:3000/api/populate_fixtures/', data)
         .success(function (result) {
           console.log("populateFixtures result: ", result);
+          $scope.fixtures = result;
+        })
+        .error(function (data, status) {
+          console.log(data);
         })
     };
 

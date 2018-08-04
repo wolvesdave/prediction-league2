@@ -121,53 +121,82 @@ router.post('/api/put_fixtures', function(req, res) {
 router.post('/api/populate_fixtures', function(req,res) {
     var startDate = req.body.startDate;
     var endDate = req.body.endDate;
+    var fixtureData = '';
 
-    var payload = {
+    payload = {
       "ApiKey":"QQQMPBBYBPJYCVJCBHFRQMFVOCOSLBPPCXVGWLRKRRKAEACUXC",
-      "seasonDateString":"1718",
+      "seasonDateString":"1819",
       "league":"Scottish Premier League",
-      "startDateString" : startDate,
+      "startDateString": startDate,
       "endDateString" : endDate
     };
 
-    console.log("payload = ", payload);
-});
-    // post('http://www.xmlsoccer.com/FootballDataDemo.asmx/GetFixturesByDateIntervalAndLeague',
-    // payload, function(res) {
-    //     if (!result) {
-    //       console.log("Fixing null result");
-    //       $scope.fixture = {Round : $scope.round, fixtures:[]}
-    //     } else {
-    //       console.log("Received from get_fixtures: ", result);
-    //
-    //       $scope.fixture = {Round : $scope.round, fixtures:[]};
-    //
-    //       for (var i = 0, len = result.length; i < len; i++) {
-    //         /* console.log("Mapping match ID ", [i].Id[0]); */
-    //         if (result[i].HomeTeam) {
-    //           HomeGoals = parseInt(result[i].HomeGoals[0])
-    //         } else {
-    //           HomeGoals = ""
-    //         }
-    //         if ([i].AwayGoals) {
-    //           AwayGoals = parseInt(result[i].AwayGoals[0])
-    //         } else {
-    //           AwayGoals = ""
-    //         }
-    //         console.log("adding match: ", match);
-    //         match = {
-    //             "_id" : result[i].Id[0],
-    //             "Date" : result[i].Date[0],
-    //             "HomeTeam" : result[i].HomeTeam[0],
-    //             "HomeGoals" : homegoals,
-    //             "AwayTeam" : result[i].AwayTeam[0],
-    //             "AwayGoals" : awaygoals,
-    //             "Location" : result[i].Location[0]
-    //           }
-    //         };
-    //         $scope.fixture.fixtures.push(match);
-    //       }
-    //   })
+    console.log("here we go with payload ", payload);
+
+    post('http://www.xmlsoccer.com/FootballDataDemo.asmx/GetFixturesByDateIntervalAndLeague',
+    payload, function(xmlres){
+
+        console.log(`STATUS: ${xmlres.statusCode}`);
+        xmlres.setEncoding('utf8');
+        console.log(`HEADERS: ${JSON.stringify(xmlres.headers)}`);
+
+        xmlres.on('data', function(chunk) {
+
+          console.log("Adding a chunk... ");
+          fixtureData+= chunk;
+
+        });
+
+        xmlres.on('end',function(response) {
+
+          parseString(fixtureData, function (err, result) {
+
+            if(err) {
+                console.log('Unknown Error');
+                return;
+              }
+
+              var inputmatches = result["XMLSOCCER.COM"].Match,
+                  outputmatches = [];
+
+              console.log(inputmatches.length);
+
+               for (var i = 0, len = inputmatches.length; i < len; i++) {
+                /* console.log("Mapping match ID ", inputmatches[i].Id[0]); */
+                if (inputmatches[i].HomeGoals !== undefined) {
+                  homegoals = parseInt(inputmatches[i].HomeGoals[0])
+                } else {
+                  homegoals = ""
+                }
+                if (inputmatches[i].AwayGoals !== undefined) {
+                  awaygoals = parseInt(inputmatches[i].AwayGoals[0])
+                } else {
+                  awaygoals = ""
+                }
+                match = {
+                  "_id" : inputmatches[i].Id[0],
+                  "Round" : parseInt(inputmatches[i].Round[0]),
+                  "Date" : inputmatches[i].Date[0],
+                  "HomeTeam" : inputmatches[i].HomeTeam[0],
+                  "HomeGoals" : homegoals,
+                  "AwayTeam" : inputmatches[i].AwayTeam[0],
+                  "AwayGoals" : awaygoals,
+                  "Location" : inputmatches[i].Location[0]
+                }
+                outputmatches.push(match);
+              };
+
+              console.log("outputmatches: ", outputmatches);
+
+              Fixture.insertMany(outputmatches, function(error, docs) {
+                if (err) return console.error(error);
+                console.log("docs: ", docs);
+                res.send(docs);
+              });
+          });
+        });
+    });
+  });
 
 
 router.get('/api/sysparms', function(req, res) {

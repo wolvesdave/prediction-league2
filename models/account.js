@@ -8,10 +8,10 @@ var Account = new Schema({
     password: String,
     email : String,
     totalScore : Number,
-    weeklyScore : [ score : Number ],
+    weeklyScore : [ {score : Number} ],
     monthlyScore : [
-      month : String,
-      score : Number
+      { month : String,
+      score : Number }
      ]
 });
 

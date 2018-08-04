@@ -8,10 +8,10 @@ var MongoClient = require('mongodb').MongoClient,
 
     payload = {
       'ApiKey':'QQQMPBBYBPJYCVJCBHFRQMFVOCOSLBPPCXVGWLRKRRKAEACUXC',
-      'seasonDateString':'1718',
+      'seasonDateString':'1819',
       'league':'Scottish Premier League',
-      'startDateString': '2017-12-01',
-      'endDateString' : '2017-12-31'
+      'startDateString': '2018-08-01',
+      'endDateString' : '2018-08-31'
     };
 
 MongoClient.connect('mongodb://localhost:27017', function(err, client) {
