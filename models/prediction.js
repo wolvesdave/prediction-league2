@@ -1,16 +1,18 @@
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 var Schema = mongoose.Schema;
 
 var Prediction = new Schema({
+    _id: mongoose.Schema.ObjectId,
     email: String,
     Round: Number,
     predictions: [
       {_id : false,
-      homeTeam: String,
-      homePrediction: Number,
-      awayTeam: String,
-      awayPrediction: Number,
-      joker: Boolean}
+      HomeTeam: String,
+      HomePrediction: {type : Number, default : 0},
+      AwayTeam: String,
+      AwayPrediction: {type : Number, default : 0},
+      joker: {type : Boolean, default : false}}
     ]
 });
 

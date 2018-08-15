@@ -3,18 +3,19 @@
 predictionApp.controller('predictionController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
 
     console.log("In predictionController", $scope);
+    $scope.userMessage = "Welcome"
 
     $scope.submit = function() {
       console.log("In submit");
-      // $http.post('http://localhost:3000/api/put_predictions/'+$scope.email+'/'+$scope.round)
       data = {email: $scope.email, Round: $scope.round, prediction: $scope.prediction}
       $http.post('http://localhost:3000/api/put_predictions/', data)
         .success(function (result) {
             console.log(result);
             $http.get('http://localhost:3000/api/get_predictions/'+$scope.round)
               .success(function (result) {
-                console.log("Recevied from get_predictions: ", result);
+                console.log("Received from get_predictions: ", result);
                 $scope.prediction = result;
+                $scope.userMessage = "Changes saved successfully!"
               });
         })
         .error(function (data, status) {

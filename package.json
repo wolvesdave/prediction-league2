@@ -11,6 +11,7 @@
   "license": "Unlicensed",
   "dependencies": {
     "assert": "^1.4.1",
+    "async": "^2.6.1",
     "body-parser": "^1.10.2",
     "chai": "~1.8.1",
     "connect-flash": "^0.1.1",

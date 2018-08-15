@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
 
@@ -7,7 +8,7 @@ var Account = new Schema({
     fullname: String,
     password: String,
     email : String,
-    totalScore : Number,
+    totalScore : {type: Number, default:0},
     weeklyScore : [ {score : Number} ],
     monthlyScore : [
       { month : String,

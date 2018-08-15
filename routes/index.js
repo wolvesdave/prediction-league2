@@ -18,6 +18,11 @@ router.get('/', function (req, res) {
   // });
 });
 
+router.get('/admin', function (req, res) {
+    res.render('admin', {user : req.user});
+  // });
+});
+
 router.get('/register', function(req, res) {
     res.render('register', { });
 });
@@ -69,7 +74,7 @@ router.get('/api/get_predictions/:round', function(req, res, next) {
   console.log("GET get_predictions input: ", req.user.email, " ", req.params.round);
   var email = req.user.email;
   var round = req.params.round;
-  Prediction.findOne({"email" : email, "Round": round}).lean().exec(function (err, result) {
+  Prediction.findOne({email : email, Round: round}).exec(function (err, result) {
     if (err) return console.error(err);
     console.log("GET get_predictions result:", result);
     res.send(result);
@@ -122,8 +127,7 @@ router.post('/api/populate_fixtures', function(req,res) {
     var startDate = req.body.startDate;
     var endDate = req.body.endDate;
     var fixtureData = '';
-
-    payload = {
+    var payload = {
       "ApiKey":"QQQMPBBYBPJYCVJCBHFRQMFVOCOSLBPPCXVGWLRKRRKAEACUXC",
       "seasonDateString":"1819",
       "league":"Scottish Premier League",
@@ -142,7 +146,7 @@ router.post('/api/populate_fixtures', function(req,res) {
 
         xmlres.on('data', function(chunk) {
 
-          console.log("Adding a chunk... ");
+          console.log("Adding a chunk... ", chunk);
           fixtureData+= chunk;
 
         });
@@ -188,12 +192,23 @@ router.post('/api/populate_fixtures', function(req,res) {
 
               console.log("outputmatches: ", outputmatches);
 
-              Fixture.insertMany(outputmatches, function(error, docs) {
-                if (err) return console.error(error);
-                console.log("docs: ", docs);
-                res.send(docs);
-              });
-          });
+              for (var i = 0, len = outputmatches.length; i < len; i++) {
+                Fixture.update(
+                  {_id : outputmatches[i]._id},
+                  outputmatches[i],
+                  {upsert:true},
+                  function(error, raw) {
+                    if (err) return console.error(error);
+                  });
+              };
+              res.send(outputmatches);
+
+              // Fixture.insertMany(outputmatches, function(error, docs) {
+              //     if (err) return console.error(error);
+              //     console.log("docs: ", docs);
+              //     res.send(docs);
+              //   });
+            });
         });
     });
   });

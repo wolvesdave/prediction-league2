@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 var Schema = mongoose.Schema;
 
 var Fixture = new Schema({
       _id : String,
       Round: Number,
       Date: Date,
-      // roundClosed: Boolean,
       HomeTeam: String,
       HomeGoals: Number,
       AwayTeam: String,
