@@ -23,11 +23,11 @@ block content
           .form-group
             Current Round
               input(type="number" name="round" value="#{round}" ng-model="round")
-              button(type="button" ng-click="changeRound()") Go
+              button(type="button" ng-click="getFixtures()") Go
           .form-group
             div(class="container")
               div(class="row")
-                div(class="col-md-3") Home Team Bitch
+                div(class="col-md-3") Home Team
                 div(class="col-md-1") Prediction
                 div(class="col-md-3") Away Team
                 div(class="col-md-1") Prediction
@@ -56,7 +56,8 @@ block content
                       br
             .form-group
               div(class="row")
-                div(class="col-lg")
+                div(class="col-lg-1")
                   button.btn.btn-default(type='submit') Submit
-                div(class="col-lg")
-                input(type="text" class="form-control" name="userMessage" value="#{userMessage}" ng-model="userMessage" readonly required)
+                div(class="col-lg-6")
+                  input(type="text" class="form-control" name="userMessage" value="#{userMessage}" ng-model="userMessage" readonly required)
+                  p #{userMessage}

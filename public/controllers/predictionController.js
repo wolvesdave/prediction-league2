@@ -27,8 +27,16 @@ predictionApp.controller('predictionController', ['$scope', '$filter', '$http', 
       console.log("In changeMonth", $scope.month);
     };
 
-    $scope.changeRound = function() {
+    $scope.getFixtures = function() {
       console.log("In changeRound ", $scope.round);
+      $http.get('http://localhost:3000/api/get_predictions/'+$scope.round)
+        .success(function (result) {
+          console.log("Received from get_predictions: ", result);
+          $scope.prediction = result;
+        })
+        .error(function (data, status) {
+            console.log(data);
+        });
     };
 
     $http.get('http://localhost:3000/api/sysparms')
@@ -36,14 +44,6 @@ predictionApp.controller('predictionController', ['$scope', '$filter', '$http', 
         $scope.email = result.email;
         $scope.round = result.sysparms.currentRound;
         $scope.month = result.sysparms.currentMonth;
-
-        $http.get('http://localhost:3000/api/get_predictions/'+$scope.round)
-          .success(function (result) {
-            console.log("Recevied from get_predictions: ", result);
-            $scope.prediction = result;
-          });
-    })
-      .error(function (data, status) {
-          console.log(data);
+        $scope.getFixtures();
     });
 }]);
