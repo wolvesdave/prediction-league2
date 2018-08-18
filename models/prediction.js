@@ -14,7 +14,8 @@ var Prediction = new Schema({
       AwayPrediction: {type : Number, default : 0},
       joker: {type : Boolean, default : false},
       HomeGoals : {type : Number, default : 0},
-      AwayGoals : {type : Number, default : 0}}
+      AwayGoals : {type : Number, default : 0},
+      points : {type : Number, default : 0}}
     ]
 });
 
