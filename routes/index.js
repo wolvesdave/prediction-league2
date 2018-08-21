@@ -54,7 +54,8 @@ router.post('/login', passport.authenticate('local'), function(req, res) {
       res.sysparms = sysparms;
       console.log("Login sysparms result: ", sysparms);
     });
-    res.redirect('/predictions');
+    res.render('index', { user : req.user });
+    // res.redirect('/predictions');
 });
 
 router.get('/logout', function(req, res) {
