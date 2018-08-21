@@ -5,8 +5,6 @@ predictionApp.controller('fixtureController', ['$scope', '$filter', '$http', fun
     console.log("In fixtureController", $scope);
 
     $scope.submit = function() {
-
-      // var data = {Round: $scope.round, fixture: $scope.fixture}
       console.log("In submit: ", $scope.fixture);
       $http.post('http://localhost:3000/api/put_fixtures/', $scope.fixture)
         .success(function (result) {
@@ -33,6 +31,19 @@ predictionApp.controller('fixtureController', ['$scope', '$filter', '$http', fun
       $http.post('http://localhost:3000/api/populate_fixtures/', data)
         .success(function (result) {
           console.log("populateFixtures result: ", result);
+          $scope.fixtures = result;
+        })
+        .error(function (data, status) {
+          console.log(data);
+        })
+    };
+
+    $scope.saveFixtures = function(fixtures) {
+      data = {"fixtures" : fixtures};
+      console.log("In saveFixtures: fixtures ", data);
+      $http.post('http://localhost:3000/api/save_fixtures/', data)
+        .success(function (result) {
+          console.log("SaveFixtures result: ", result);
           $scope.fixtures = result;
         })
         .error(function (data, status) {

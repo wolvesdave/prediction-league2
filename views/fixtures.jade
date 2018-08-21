@@ -14,7 +14,7 @@ block content
       p You are currently logged in as #{user.email}
       a(href="/logout") Logout
       br
-      form(ng-submit="submit()", ng-controller="fixtureController")
+      form(ng-submit="saveFixtures(fixtures)", ng-controller="fixtureController")
           .form-group
             label Start Date
               input(type="string" name="startDate" ng-model="startDate")
@@ -30,16 +30,22 @@ block content
               input(type="number" name="round" value="#{round}" ng-model="round")
               button(type="button" ng-click="changeRound()") Go
           .form-group
-            div(class="col-xs-3") Home Team
+            div(class="col-xs-3") Date
             div(class="col-xs-3") Away Team
+            div(class="col-xs-3") Home Team
+            div(class="col-xs-3") Location
           br
           .form-group
             div(ng-repeat="fixture in fixtures" ng-submit="submit()")
               div(class="row")
                 div(class="col-xs-3")
+                  input(type="text" date = "MM-dd-yyyy" class="form-control" name="Date" value="{{ fixture.Date }}" ng-model="fixture.Date" required)
+                div(class="col-xs-3")
                   input(type="text" class="form-control" name="homeTeam" value="{{ fixture.HomeTeam }}" ng-model="fixture.HomeTeam" required)
                 div(class="col-xs-3")
                   input(type="text" class="form-control" name="awayTeam" value="{{ fixture.AwayTeam }}" ng-model="fixture.AwayTeam" required)
+                div(class="col-xs-3")
+                  input(type="text" class="form-control" name="Location" value="{{ fixture.Location }}" ng-model="fixture.Location" required)
           br
           div(class="button-box col-lg-12")
             button.btn.btn-default(type="button" ng-click="addMatch()") Add

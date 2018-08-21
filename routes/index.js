@@ -67,7 +67,7 @@ router.get('/predictions', function(req, res) {
 });
 
 router.get('/fixtures', function(req, res) {
-    res.render('fixtures', { user : req.user});
+    res.render('fixtures', {moment:require('moment'), user : req.user});
 });
 
 router.get('/api/get_predictions/:round', function(req, res, next) {
@@ -189,30 +189,27 @@ router.post('/api/populate_fixtures', function(req,res) {
                 }
                 outputmatches.push(match);
               };
-
               console.log("outputmatches: ", outputmatches);
-
-              for (var i = 0, len = outputmatches.length; i < len; i++) {
-                Fixture.update(
-                  {_id : outputmatches[i]._id},
-                  outputmatches[i],
-                  {upsert:true},
-                  function(error, raw) {
-                    if (err) return console.error(error);
-                  });
-              };
               res.send(outputmatches);
 
-              // Fixture.insertMany(outputmatches, function(error, docs) {
-              //     if (err) return console.error(error);
-              //     console.log("docs: ", docs);
-              //     res.send(docs);
-              //   });
             });
         });
     });
   });
 
+router.post('/api/save_fixtures', function(req,res) {
+      var fixtures = req.body.fixtures;
+      console.log("Saving fixtures ", fixtures, " length ", fixtures.length);
+      for (var i = 0, len = fixtures.length; i < len; i++) {
+      Fixture.update(
+        {_id : fixtures[i]._id},
+        fixtures[i],
+        {upsert:true},
+        function(err, raw) {
+          if (err) return console.error(err);
+        });
+    };
+});
 
 router.get('/api/sysparms', function(req, res) {
     /* Get System parameters */
