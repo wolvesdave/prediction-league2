@@ -23,11 +23,7 @@ predictionApp.controller('predictionController', ['$scope', '$filter', '$http', 
       })
     };
 
-    $scope.changeMonth = function() {
-      console.log("In changeMonth", $scope.month);
-    };
-
-    $scope.getFixtures = function() {
+    $scope.getPredictions = function() {
       console.log("In changeRound ", $scope.round);
       $http.get('http://localhost:3000/api/get_predictions/'+$scope.round)
         .success(function (result) {
@@ -44,6 +40,6 @@ predictionApp.controller('predictionController', ['$scope', '$filter', '$http', 
         $scope.email = result.email;
         $scope.round = result.sysparms.currentRound;
         $scope.month = result.sysparms.currentMonth;
-        $scope.getFixtures();
+        $scope.getPredictions();
     });
 }]);

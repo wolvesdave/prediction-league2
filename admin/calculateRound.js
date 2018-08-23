@@ -26,6 +26,7 @@ var MongoClient = require('mongodb').MongoClient,
       predictionList.forEach(function(userItem, i) {
 
         var newUserItem = {};
+        var roundScore = 0;
         newUserItem._id = userItem._id;
         newUserItem.email = userItem.email;
         newUserItem.Round = userItem.Round;
@@ -46,6 +47,7 @@ var MongoClient = require('mongodb').MongoClient,
           newPredictionItem.HomeGoals = fixtureLookup[0].HomeGoals;
           newPredictionItem.AwayGoals = fixtureLookup[0].AwayGoals;
           newPredictionItem.points = calcMatchScore(newPredictionItem);
+          roundScore += newPredictionItem.points;
           console.log("newPredictionItem", newPredictionItem);
           newUserItem.predictions.push(newPredictionItem);
         })
@@ -58,6 +60,8 @@ var MongoClient = require('mongodb').MongoClient,
           console.log("successfully saved ", doc);
         }
         });
+        console.log("Updating user ", newUserItem._id, " score by ", roundScore);
+        Account.findOneAndUpdate({_id:newUserItem._id}, {$set : {totalScore : newUserItem.totalScore+roundScore}});
         })
       });
 

@@ -1,33 +1,28 @@
-extends layout
 
-block content
-  if (!user)
-    a(href="/login") Login
-    br
-    a(href="/register") Register
-  if (user)
-    nav.navbar.navbar-default( role="navigation" )
-        .navbar-header
-            button.navbar-toggle.collapsed( type="button", data-toggle="collapse", data-target="#navbar-inverse", aria-expanded="false", aria-controls="navbar")
-                span.sr-only Toggle navigation
-                span.icon-bar
-                span.icon-bar
-                span.icon-bar
-            a.navbar-brand(href="#") English Premier League Prediction League
+nav.navbar.navbar-default( role="navigation" )
+    .navbar-header
+        button.navbar-toggle.collapsed( type="button", data-toggle="collapse", data-target="#navbar-inverse", aria-expanded="false", aria-controls="navbar")
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+        a.navbar-brand(href="#") English Premier League Prediction League
 
-        #navbar-inverse.collapse.navbar-collapse
-            ul.nav.navbar-nav
-                li.active: a( href="#") Home
-                li: a( href="/predictions" ) Predictions
-                li: a( href="/table" ) Table
-                li.dropdown
-                    a.dropdown-toggle( href="#", data-toggle="dropdown", role="button", aria-expanded="false" ) Dropdown
-                        span.caret
-                    ul.dropdown-menu( role="menu" )
-                        li: a( href="/sysparms" ) Sysparms
-                        li: a( href="#" ) Something
-                        li: a( href="#" ) Something else here
-                        li.divider
-                        li.dropdown-header Nav header
-                        li: a( href="#" ) Separated link
-                        li: a( href="#" ) One more separated link
+    #navbar-inverse.collapse.navbar-collapse
+        ul.nav.navbar-nav
+            li.active: a( href="#") Home
+            li: a( href="/predictions" ) Predictions
+            li: a( href="/table" ) Table
+            li: a( href="/fixtures" ) Fixtures
+            li.dropdown
+                a.dropdown-toggle( href="#", data-toggle="dropdown", role="button", aria-expanded="false" ) More Options
+                    span.caret
+                ul.dropdown-menu( role="menu" )
+                    li: a( href="/sysparms" ) Sysparms
+                    li: a( href="#" ) Something
+                    li: a( href="#" ) Something else here
+                    li.divider
+                    li.dropdown-header Nav header
+                    li: a( href="#" ) Separated link
+                    li: a( href="/logout" ) Logout
+            li: a( href="#" ) #{moment(Date.now()).format('MM/DD/YYYY')} #{user.email}

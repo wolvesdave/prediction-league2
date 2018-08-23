@@ -67,6 +67,10 @@ router.get('/predictions', function(req, res) {
     res.render('predictions', { user : req.user});
 });
 
+router.get('/table', function(req, res) {
+    res.render('table', { user : req.user});
+});
+
 router.get('/fixtures', function(req, res) {
     res.render('fixtures', {moment:require('moment'), user : req.user});
 });
@@ -220,6 +224,15 @@ router.get('/api/sysparms', function(req, res) {
     var result = {'email': req.user.email, 'sysparms': sysparms};
     console.log("GET sysparms result: ", result);
     res.send(result);
+  });
+});
+
+router.get('/api/get_scores', function(req, res) {
+  console.log("In get_scores");
+  Account.find({},{_id: 0, username: 1, fullname: 1, totalScore : 1, weeklyScore : 1, monthlyScore : 1}).exec(function (err, results) {
+    if (err) return console.error(err);
+    console.log("GET scores result: ", results);
+    res.send(results);
   });
 });
 
