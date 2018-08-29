@@ -60,8 +60,15 @@ var MongoClient = require('mongodb').MongoClient,
           console.log("successfully saved ", doc);
         }
         });
-        console.log("Updating user ", newUserItem._id, " score by ", roundScore);
-        Account.findOneAndUpdate({_id:newUserItem._id}, {$set : {totalScore : newUserItem.totalScore+roundScore}});
+        console.log("Updating user ", newUserItem.email, " score by ", roundScore);
+        Account.findOneAndUpdate({email:newUserItem.email}, {$inc : [{totalScore : roundScore, "weeklyScore.sysparms.currentRound" : roundScore}]}, function (err, doc) {
+          if (err) {
+            console.log(err);
+            return err;
+        } else {
+          console.log("successfully saved ", doc);
+        }
+        });
         })
       });
 

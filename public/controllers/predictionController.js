@@ -38,6 +38,7 @@ predictionApp.controller('predictionController', ['$scope', '$filter', '$http', 
     $http.get('http://localhost:3000/api/sysparms')
       .success(function (result) {
         $scope.email = result.email;
+        $scope.sysparms = result.sysparms;
         $scope.round = result.sysparms.currentRound;
         $scope.month = result.sysparms.currentMonth;
         $scope.getPredictions();
