@@ -26,22 +26,22 @@ var MongoClient = require('mongodb').MongoClient,
 function calcMatchScore(prediction) {
   var score = 0;
   var pointsDeduction = 0;
-  if (prediction.HomeGoals > prediction.AwayGoals) {
+  if (prediction.homeGoals > prediction.awayGoals) {
       result = "Home Win";
   } else
-  if (prediction.HomeGoals == prediction.AwayGoals) {
+  if (prediction.homeGoals == prediction.awayGoals) {
       result = "Draw";
   } else
-  if (prediction.HomeGoals < prediction.AwayGoals) {
+  if (prediction.homeGoals < prediction.awayGoals) {
       result = "Away Win";
   };
-  if (prediction.HomePrediction > prediction.AwayPrediction) {
+  if (prediction.homePrediction > prediction.awayPrediction) {
       predictedResult = "Home Win";
   } else
-  if (prediction.HomePrediction == prediction.AwayPrediction) {
+  if (prediction.homePrediction == prediction.awayPrediction) {
       predictedResult = "Draw";
   } else
-  if (prediction.HomePrediction < prediction.AwayPrediction) {
+  if (prediction.homePrediction < prediction.awayPrediction) {
       predictedResult = "Away Win";
   };
   console.log("Result was ", result, " Prediction was ", predictedResult);
@@ -51,10 +51,10 @@ function calcMatchScore(prediction) {
     } else {
       score = 15
     }
-    if (prediction.HomeGoals == prediction.HomePrediction) {
+    if (prediction.homeGoals == prediction.homePrediction) {
       score = score * 3
     } else {
-      pointsDeduction = Math.abs(prediction.HomeGoals - prediction.HomePrediction) + Math.abs(prediction.AwayGoals - prediction.AwayPrediction)
+      pointsDeduction = Math.abs(prediction.homeGoals - prediction.homePrediction) + Math.abs(prediction.awayGoals - prediction.awayPrediction)
       score = score - pointsDeduction;
     }
   } else score = -5;

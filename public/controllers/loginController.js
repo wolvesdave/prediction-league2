@@ -7,7 +7,7 @@ predictionApp.controller('loginController', ['$scope', '$filter', '$http', funct
     // $scope.submit = function() {
     //   console.log("In Login submit");
     //
-    //   data = {email: $scope.email, Round: $scope.round, predictions: $scope.predictions}
+    //   data = {email: $scope.email, round: $scope.round, predictions: $scope.predictions}
     //
     //   $http.post('http://localhost:3000/login/', data)
     //     .success(function (result) {

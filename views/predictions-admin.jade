@@ -6,11 +6,11 @@ block content
     br
     a(href="/register") Register
   if (user)
-    include navbar.jade
+    include navbar-admin.jade
 
     form(ng-submit="submit()", ng-controller="predictionController")
         .form-group
-          label Current Round 
+          label Current Round
             input(type="number" name="round" value="#{round}" ng-model="round")
             button(type="button" ng-click="getPredictions()") Go
         .form-group

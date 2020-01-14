@@ -6,7 +6,7 @@ block content
       br
       a(href="/register") Register
     if (user)
-      include navbar.jade
+      include navbar-admin.jade
 
       br
       form(ng-submit="saveFixtures(fixtures)", ng-controller="fixtureController")

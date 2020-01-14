@@ -4,12 +4,12 @@ var Schema = mongoose.Schema;
 
 var Fixture = new Schema({
       _id : String,
-      Round: Number,
+      round: Number,
       Date: Date,
-      HomeTeam: String,
-      HomeGoals: Number,
-      AwayTeam: String,
-      AwayGoals: Number,
+      homeTeam: String,
+      homeGoals: Number,
+      awayTeam: String,
+      awayGoals: Number,
       Location: String
 });
 

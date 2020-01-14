@@ -5,16 +5,16 @@ var Schema = mongoose.Schema;
 var Prediction = new Schema({
     _id: mongoose.Schema.ObjectId,
     email: String,
-    Round: Number,
+    round: Number,
     predictions: [
       {_id : false,
-      HomeTeam: String,
-      HomePrediction: {type : Number, default : 0},
-      AwayTeam: String,
-      AwayPrediction: {type : Number, default : 0},
+      homeTeam: String,
+      homePrediction: {type : Number, default : 0},
+      awayTeam: String,
+      awayPrediction: {type : Number, default : 0},
       joker: {type : Boolean, default : false},
-      HomeGoals : {type : Number, default : 0},
-      AwayGoals : {type : Number, default : 0},
+      homeGoals : {type : Number, default : 0},
+      awayGoals : {type : Number, default : 0},
       points : {type : Number, default : 0}}
     ]
 });

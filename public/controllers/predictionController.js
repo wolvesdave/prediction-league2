@@ -7,7 +7,7 @@ predictionApp.controller('predictionController', ['$scope', '$filter', '$http', 
 
     $scope.submit = function() {
       console.log("In submit");
-      data = {email: $scope.email, Round: $scope.round, prediction: $scope.prediction}
+      data = {email: $scope.email, round: $scope.round, prediction: $scope.prediction}
       $http.post('http://localhost:3000/api/put_predictions/', data)
         .success(function (result) {
             console.log(result);

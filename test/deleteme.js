@@ -1,4 +1,4 @@
-var query = {"email" : req.user.email, "Round": req.user.round};
+var query = {"email" : req.user.email, "round": req.user.round};
 var pred = {homeTeam: [ 'Wolves', 'Man U', 'Man U', 'Leicester', 'Wolves', 'Leicester' ],
     homePrediction: [ '2', '3', '0', '0', '1', '0' ],
     awayTeam: [ 'Albion', 'Arsenal', 'Arsenal', 'Villa', 'Albion', 'Villa' ],
@@ -26,7 +26,7 @@ Prediction.findById(id, function (err, tank) {
 db.predictions.insertOne({
 	"email" : "wolvesdave@gmail.com",
 	"name" : "David Koppe",
-	"Round" : 1,
+	"round" : 1,
   "predictions": {homeTeam: [ 'Wolves', 'Man U', 'Man U', 'Leicester', 'Wolves', 'Leicester' ],
   homePrediction: [  ],
   awayTeam: [ 'Albion', 'Arsenal', 'Arsenal', 'Villa', 'Albion', 'Villa' ],
@@ -49,7 +49,7 @@ db.predictions.updateOne({email:"wolvesdave@gmail.com"},{$set: {predictions : [
 {"homeTeam" : "Wolves", "awayTeam" : "Fulham"}
 ]}});
 
-db.predictions.findOneAndUpdate({email:"wolvesdave@gmail.com", Round: 1}, {$set: { predictions :
+db.predictions.findOneAndUpdate({email:"wolvesdave@gmail.com", round: 1}, {$set: { predictions :
 [ { homeTeam: 'Arsenal',
     homePrediction: '1',
     awayTeam: 'Everton',
@@ -101,7 +101,7 @@ db.predictions.findOneAndUpdate({email:"wolvesdave@gmail.com", Round: 1}, {$set:
     awayPrediction: '1',
     joker: '0' } ]}}, {upsert:true});
 
-  db.predictions.insertOne({email:"wolvesdave@gmail.com", Round:1, predictions : [
+  db.predictions.insertOne({email:"wolvesdave@gmail.com", round:1, predictions : [
     {"homeTeam" : "Arsenal", "awayTeam" : "Everton"},
     {"homeTeam" : "Aston Villa", "awayTeam" : "Liverpool"},
     {"homeTeam" : "Burnley", "awayTeam" : "Brighton & Hove Albion"},
@@ -116,13 +116,13 @@ db.predictions.findOneAndUpdate({email:"wolvesdave@gmail.com", Round: 1}, {$set:
 
 var Prediction = require('../models/prediction');
 Prediction.findOne({query})
-query = { email: 'wolvesdave@gmail.com', Round: 1 }
+query = { email: 'wolvesdave@gmail.com', round: 1 }
 
 
 {
 	"_id" : ObjectId("5adf6880ec247b2eb0e627a8"),
 	"email" : "wolvesdave@gmail.com",
-	"Round" : 1,
+	"round" : 1,
 	"predictions" : [
 		{
 			"homeTeam" : "Arsenal",
@@ -204,7 +204,7 @@ db.predictions.findOneAndUpdate({email: "wolvesdave@gmail.com"},{$set: {
 { "_id" : ObjectId("5aea4b2ed2cefab7a3033ce0"), "fixtures" : [ ] }
 {
 	"_id" : ObjectId("5aea4e73d2cefab7a3033ce1"),
-	"Round" : 1,
+	"round" : 1,
 	"fixtures" : [
 		{
 			"homeTeam" : "wolves",
@@ -222,7 +222,7 @@ db.predictions.findOneAndUpdate({email: "wolvesdave@gmail.com"},{$set: {
 }
 {
 	"_id" : ObjectId("5aeb709e4b8bb31dcce444f2"),
-	"Round" : 2,
+	"round" : 2,
 	"fixtures" : [
 		{
 			"homeTeam" : "a",
@@ -237,12 +237,12 @@ db.predictions.findOneAndUpdate({email: "wolvesdave@gmail.com"},{$set: {
 }
 >
 [
-  {"_id":"380441","Round":19,"Date":"2017-12-17T12:30:00+00:00","HomeTeam":"Hearts","HomeGoals":4,"AwayTeam":"Celtic","AwayGoals":0,"Location":"Tynecastle Stadium"},
-  {"_id":"380443","Round":19,"Date":"2017-12-16T15:00:00+00:00","HomeTeam":"Rangers","HomeGoals":1,"AwayTeam":"St Johnstone","AwayGoals":3,"Location":"Ibrox Stadium"},
-  {"_id":"380442","Round":19,"Date":"2017-12-16T15:00:00+00:00","HomeTeam":"Kilmarnock","HomeGoals":1,"AwayTeam":"Motherwell","AwayGoals":0,"Location":"Rugby Park"},
-  {"_id":"380440","Round":19,"Date":"2017-12-16T15:00:00+00:00","HomeTeam":"Hamilton","HomeGoals":3,"AwayTeam":"Ross County","AwayGoals":2,"Location":"New Douglas Park"},
-  {"_id":"380439","Round":19,"Date":"2017-12-16T15:00:00+00:00","HomeTeam":"Dundee FC","HomeGoals":3,"AwayTeam":"Partick","AwayGoals":0,"Location":"Dens Park"},
-  {"_id":"380438","Round":19,"Date":"2017-12-16T12:30:00+00:00","HomeTeam":"Aberdeen","HomeGoals":4,"AwayTeam":"Hibernian","AwayGoals":1,"Location":"Pittodrie Stadium"}
+  {"_id":"380441","round":19,"Date":"2017-12-17T12:30:00+00:00","homeTeam":"Hearts","homeGoals":4,"awayTeam":"Celtic","awayGoals":0,"Location":"Tynecastle Stadium"},
+  {"_id":"380443","round":19,"Date":"2017-12-16T15:00:00+00:00","homeTeam":"Rangers","homeGoals":1,"awayTeam":"St Johnstone","awayGoals":3,"Location":"Ibrox Stadium"},
+  {"_id":"380442","round":19,"Date":"2017-12-16T15:00:00+00:00","homeTeam":"Kilmarnock","homeGoals":1,"awayTeam":"Motherwell","awayGoals":0,"Location":"Rugby Park"},
+  {"_id":"380440","round":19,"Date":"2017-12-16T15:00:00+00:00","homeTeam":"Hamilton","homeGoals":3,"awayTeam":"Ross County","awayGoals":2,"Location":"New Douglas Park"},
+  {"_id":"380439","round":19,"Date":"2017-12-16T15:00:00+00:00","homeTeam":"Dundee FC","homeGoals":3,"awayTeam":"Partick","awayGoals":0,"Location":"Dens Park"},
+  {"_id":"380438","round":19,"Date":"2017-12-16T12:30:00+00:00","homeTeam":"Aberdeen","homeGoals":4,"awayTeam":"Hibernian","awayGoals":1,"Location":"Pittodrie Stadium"}
 ]
 
 .error(function (data, status) {

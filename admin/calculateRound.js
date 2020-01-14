@@ -19,7 +19,7 @@ var MongoClient = require('mongodb').MongoClient,
       getFixtures,
       getPredictions,
   ], function (err, currentRound, fixtureList, predictionList) {
-      console.log("Round ", currentRound, " Fixtures ", fixtureList, " Predictions ", predictionList);
+      console.log("round ", currentRound, " Fixtures ", fixtureList, " Predictions ", predictionList);
       console.log("fixtureList Length is ", fixtureList.length);
       console.log("predictionList Length is ", predictionList.length);
 
@@ -29,23 +29,23 @@ var MongoClient = require('mongodb').MongoClient,
         var roundScore = 0;
         newUserItem._id = userItem._id;
         newUserItem.email = userItem.email;
-        newUserItem.Round = userItem.Round;
+        newUserItem.round = userItem.round;
         newUserItem.predictions = [];
         console.log("processing index ", i, " user", newUserItem);
 
         userItem.predictions.forEach(function(predictionItem, j) {
           console.log("processing index ", j, "prediction ", predictionItem, " ", userItem.predictions[j]._id);
           var fixtureLookup = fixtureList.filter(x=> x._id === predictionItem._id);
-          console.log("Fixture ", fixtureLookup[0]._id, " HomeGoals = ", fixtureLookup[0].HomeGoals, "AwayGoals = ", fixtureLookup[0].AwayGoals);
+          console.log("Fixture ", fixtureLookup[0]._id, " homeGoals = ", fixtureLookup[0].homeGoals, "awayGoals = ", fixtureLookup[0].awayGoals);
           var newPredictionItem = {};
           newPredictionItem._id = predictionItem._id;
-          newPredictionItem.HomeTeam = predictionItem.HomeTeam;
-          newPredictionItem.AwayTeam = predictionItem.AwayTeam;
-          newPredictionItem.HomePrediction = predictionItem.HomePrediction;
-          newPredictionItem.AwayPrediction = predictionItem.AwayPrediction;
+          newPredictionItem.homeTeam = predictionItem.homeTeam;
+          newPredictionItem.awayTeam = predictionItem.awayTeam;
+          newPredictionItem.homePrediction = predictionItem.homePrediction;
+          newPredictionItem.awayPrediction = predictionItem.awayPrediction;
           newPredictionItem.joker = predictionItem.joker;
-          newPredictionItem.HomeGoals = fixtureLookup[0].HomeGoals;
-          newPredictionItem.AwayGoals = fixtureLookup[0].AwayGoals;
+          newPredictionItem.homeGoals = fixtureLookup[0].homeGoals;
+          newPredictionItem.awayGoals = fixtureLookup[0].awayGoals;
           newPredictionItem.points = calcMatchScore(newPredictionItem);
           roundScore += newPredictionItem.points;
           console.log("newPredictionItem", newPredictionItem);
@@ -78,13 +78,13 @@ var MongoClient = require('mongodb').MongoClient,
       if (err) return console.error(err);
       console.log(sysparms);
       var round = sysparms.currentRound;
-      console.log("Round is ", round);
+      console.log("round is ", round);
       callback(null, round);
     });
   };
 
   function getFixtures(currentRound, callback) {
-    Fixture.find({Round : currentRound}, function(err,fixtureList) {
+    Fixture.find({round : currentRound}, function(err,fixtureList) {
       console.log("In getFixtures callback");
       if (err) return console.error(err);
       console.log("I got this round ", currentRound);
@@ -93,10 +93,10 @@ var MongoClient = require('mongodb').MongoClient,
   };
 
   function getPredictions(currentRound, fixtureList, callback) {
-    Prediction.find({Round : currentRound}, function(err,predictionList) {
+    Prediction.find({round : currentRound}, function(err,predictionList) {
       console.log("In getPredictions callback");
       if (err) return console.error(err);
-      console.log("Round ", currentRound, " Fixtures: ", fixtureList);
+      console.log("round ", currentRound, " Fixtures: ", fixtureList);
       callback(null, currentRound, fixtureList, predictionList);
     });
   };
@@ -104,22 +104,22 @@ var MongoClient = require('mongodb').MongoClient,
   function calcMatchScore(prediction) {
     var score = 0;
     var pointsDeduction = 0;
-    if (prediction.HomeGoals > prediction.AwayGoals) {
+    if (prediction.homeGoals > prediction.awayGoals) {
         result = "Home Win";
     } else
-    if (prediction.HomeGoals == prediction.AwayGoals) {
+    if (prediction.homeGoals == prediction.awayGoals) {
         result = "Draw";
     } else
-    if (prediction.HomeGoals < prediction.AwayGoals) {
+    if (prediction.homeGoals < prediction.awayGoals) {
         result = "Away Win";
     };
-    if (prediction.HomePrediction > prediction.AwayPrediction) {
+    if (prediction.homePrediction > prediction.awayPrediction) {
         predictedResult = "Home Win";
     } else
-    if (prediction.HomePrediction == prediction.AwayPrediction) {
+    if (prediction.homePrediction == prediction.awayPrediction) {
         predictedResult = "Draw";
     } else
-    if (prediction.HomePrediction < prediction.AwayPrediction) {
+    if (prediction.homePrediction < prediction.awayPrediction) {
         predictedResult = "Away Win";
     };
     console.log("Result was ", result, " Prediction was ", predictedResult);
@@ -129,10 +129,10 @@ var MongoClient = require('mongodb').MongoClient,
       } else {
         score = 15
       }
-      if (prediction.HomeGoals == prediction.HomePrediction) {
+      if (prediction.homeGoals == prediction.homePrediction) {
         score = score * 3
       } else {
-        pointsDeduction = Math.abs(prediction.HomeGoals - prediction.HomePrediction) + Math.abs(prediction.AwayGoals - prediction.AwayPrediction)
+        pointsDeduction = Math.abs(prediction.homeGoals - prediction.homePrediction) + Math.abs(prediction.awayGoals - prediction.awayPrediction)
         score = score - pointsDeduction;
       }
     } else score = -5;

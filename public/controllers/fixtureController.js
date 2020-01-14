@@ -11,7 +11,7 @@ predictionApp.controller('fixtureController', ['$scope', '$filter', '$http', fun
             console.log(result);
             $http.get('http://localhost:3000/api/get_fixtures/'+$scope.round)
               .success(function (result) {
-                console.log("Recevied from get_fixtures: ", result);
+                console.log("Received from get_fixtures: ", result);
                 $scope.fixture = result;
               });
         })
@@ -57,7 +57,7 @@ predictionApp.controller('fixtureController', ['$scope', '$filter', '$http', fun
         .success(function (result) {
           if (!result) {
             console.log("Fixing null result");
-            result = {Round : $scope.round, fixtures:[]}
+            result = {round : $scope.round, fixtures:[]}
           }
           console.log("Recevied from get_fixtures: ", result);
           $scope.fixture = result;

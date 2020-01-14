@@ -10,11 +10,21 @@ var MongoClient = require('mongodb').MongoClient,
       'ApiKey':'QQQMPBBYBPJYCVJCBHFRQMFVOCOSLBPPCXVGWLRKRRKAEACUXC',
       'seasonDateString':'1819',
       'league':'Scottish Premier League',
-      'startDateString': '2018-08-01',
-      'endDateString' : '2018-08-31'
+      'startDateString': '2020-01-01',
+      'endDateString' : '2020-01-31'
     };
 
-MongoClient.connect('mongodb://localhost:27017', function(err, client) {
+const uri = "mongodb://localhost:27017";
+const client = new MongoClient(uri);
+client.connect(err => {
+// MongoClient.connect('mongodb://localhost:27017', function(err, client) {
+  if (process.argv[2] == null || process.argv[2] == null ) {
+    console.log("Usage: loadFixtures.js <start date> <end date> date = YYYY-MM-DD");
+    process.exit(1)
+  } else {
+    startDateString = process.argv[2];
+    endDateString = process.argv[2];
+  };
 
   assert.equal(null, err);
   console.log("Connected successfully to server");
@@ -29,7 +39,7 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client) {
 
       res.on('data', function(chunk) {
 
-        console.log("Adding a chunk... ");
+        console.log(`Adding a chunk... ${chunk}`);
         fixtureData+= chunk;
 
       });
@@ -46,10 +56,11 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client) {
             var inputmatches = result["XMLSOCCER.COM"].Match,
                 outputmatches = [];
 
-            console.log(inputmatches.length);
+            console.log(`inputmatches length is ${inputmatches.length}`);
 
              for (var i = 0, len = inputmatches.length; i < len; i++) {
               /* console.log("Mapping match ID ", inputmatches[i].Id[0]); */
+              console.log(`inputmatch is ${JSON.stringify(inputmatches[i])})`);
               if (inputmatches[i].HomeGoals !== undefined) {
                 homegoals = parseInt(inputmatches[i].HomeGoals[0])
               } else {
@@ -61,32 +72,39 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client) {
                 awaygoals = ""
               }
               match = {
-                "_id" : inputmatches[i].Id[0],
-                "Round" : parseInt(inputmatches[i].Round[0]),
-                "Date" : inputmatches[i].Date[0],
-                "HomeTeam" : inputmatches[i].HomeTeam[0],
-                "HomeGoals" : homegoals,
-                "AwayTeam" : inputmatches[i].AwayTeam[0],
-                "AwayGoals" : awaygoals,
-                "Location" : inputmatches[i].Location[0]
+                _id : inputmatches[i].Id[0],
+                round : parseInt(inputmatches[i].Round[0]),
+                date : inputmatches[i].Date[0],
+                homeTeam : inputmatches[i].HomeTeam[0],
+                homeGoals : homegoals,
+                awayTeam : inputmatches[i].AwayTeam[0],
+                awayGoals : awaygoals,
+                location : inputmatches[i].Location[0]
               }
-              outputmatches.push(match);
-            };
+              db.collection('fixtures').replaceOne({_id : match._id}, match, {upsert: true}, function(err, r) {
+
+                assert.equal(null, err);
+                console.log(`Fixture inserted with result ${r}`);
+                client.close()
+              // outputmatches.push(match);
+              });
 
             /* console.log(outputmatches); */
 
-            db.collection('fixtures').insertMany(outputmatches, function(err, r) {
+            // db.collection('fixtures').updateMany({}, outputmatches, {upsert: true} function(err, r) {
+            //
+            //   assert.equal(null, err);
+            //   console.log(`Fixtures inserted with result ${r}`);
+            //
+            // });
 
-              assert.equal(null, err);
-              console.log('Fixtures inserted with result ', r);
 
-            });
+          };
 
-
-        });
 
       });
 
-  });
+    });
 
+  });
 });
