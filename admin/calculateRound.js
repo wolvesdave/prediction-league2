@@ -8,8 +8,10 @@ var MongoClient = require('mongodb').MongoClient,
     post = require('http-post'),
     async = require('async'),
     mongoose = require('mongoose');
+    sleep = require('sleep');
+    findIndex = require('array.prototype.findindex');
 
-    mongoose.connect('mongodb://localhost/prediction-league', {
+    var db = mongoose.connect('mongodb://localhost/prediction-league', {
       useMongoClient: true,
       /* other options */
     });
@@ -18,69 +20,103 @@ var MongoClient = require('mongodb').MongoClient,
       getSysparms,
       getFixtures,
       getPredictions,
-  ], function (err, currentRound, fixtureList, predictionList) {
-      console.log("round ", currentRound, " Fixtures ", fixtureList, " Predictions ", predictionList);
-      console.log("fixtureList Length is ", fixtureList.length);
-      console.log("predictionList Length is ", predictionList.length);
+      calculateRoundScore,
+      saveScores
+  ], function(err, result) {
+    if (err) {
+      console.log(err);
+      return err;
+    } else {
+      console.log(`Successful result ${result}`);
+      mongoose.disconnect();
+    }
+  })
 
-      predictionList.forEach(function(userItem, i) {
-
-        var newUserItem = {};
-        var roundScore = 0;
-        newUserItem._id = userItem._id;
-        newUserItem.email = userItem.email;
-        newUserItem.round = userItem.round;
-        newUserItem.predictions = [];
-        console.log("processing index ", i, " user", newUserItem);
-
-        userItem.predictions.forEach(function(predictionItem, j) {
-          console.log("processing index ", j, "prediction ", predictionItem, " ", userItem.predictions[j]._id);
-          var fixtureLookup = fixtureList.filter(x=> x._id === predictionItem._id);
-          console.log("Fixture ", fixtureLookup[0]._id, " homeGoals = ", fixtureLookup[0].homeGoals, "awayGoals = ", fixtureLookup[0].awayGoals);
-          var newPredictionItem = {};
-          newPredictionItem._id = predictionItem._id;
-          newPredictionItem.homeTeam = predictionItem.homeTeam;
-          newPredictionItem.awayTeam = predictionItem.awayTeam;
-          newPredictionItem.homePrediction = predictionItem.homePrediction;
-          newPredictionItem.awayPrediction = predictionItem.awayPrediction;
-          newPredictionItem.joker = predictionItem.joker;
-          newPredictionItem.homeGoals = fixtureLookup[0].homeGoals;
-          newPredictionItem.awayGoals = fixtureLookup[0].awayGoals;
-          newPredictionItem.points = calcMatchScore(newPredictionItem);
-          roundScore += newPredictionItem.points;
-          console.log("newPredictionItem", newPredictionItem);
-          newUserItem.predictions.push(newPredictionItem);
-        })
-        console.log("modified predictionItem is ", newUserItem);
-        Prediction.findOneAndUpdate({_id : newUserItem._id},newUserItem, function (err, doc) {
-          if (err) {
-            console.log(err);
-            return err;
+  function saveScores(currentRound, email, roundScore, callback) {
+      console.log(`Updating user ${email} round ${currentRound} score by  ${roundScore}`);
+      Account.findOne({email : email}, async function(err, doc) {
+        if (err) {
+          console.log(err);
+          return err;
+      } else {
+        console.log(`Found this doc ${doc}`);
+        doc.totalScore += roundScore;
+        i = doc.weeklyScore.findIndex(i => i.round === currentRound);
+        if (i < 0) {
+          console.log(`Didnt find weekly score for round ${currentRound} - pushing it`);
+          doc.weeklyScore.push({round : currentRound, score : roundScore})
         } else {
-          console.log("successfully saved ", doc);
+          console.log(`Found weekly score for round ${currentRound} - updating it`);
+          doc.weeklyScore[i].score = roundScore;
         }
-        });
-        console.log("Updating user ", newUserItem.email, " score by ", roundScore);
-        Account.findOneAndUpdate({email:newUserItem.email}, {$inc : [{totalScore : roundScore, "weeklyScore.sysparms.currentRound" : roundScore}]}, function (err, doc) {
-          if (err) {
-            console.log(err);
-            return err;
-        } else {
-          console.log("successfully saved ", doc);
-        }
-        });
-        })
+        await doc.save()
+        console.log(`Successfully saved ${doc}`);
+      }
+      callback(null, 'successfully saved');
       });
+    };
+
+function calculateRoundScore(currentRound, fixtureList, predictionList, callback) {
+  console.log("round ", currentRound, " Fixtures ", fixtureList, " Predictions ", predictionList);
+  console.log("fixtureList Length is ", fixtureList.length);
+  console.log("predictionList Length is ", predictionList.length);
+
+  predictionList.forEach(function(userItem, i) {
+
+    var newUserItem = {};
+    var roundScore = 0;
+    newUserItem._id = userItem._id;
+    newUserItem.email = userItem.email;
+    newUserItem.round = userItem.round;
+    newUserItem.predictions = [];
+    console.log("processing index ", i, " user", newUserItem);
+
+    userItem.predictions.forEach(function(predictionItem, j) {
+      console.log("processing index ", j, "prediction ", predictionItem, " ", userItem.predictions[j]._id);
+      var fixtureLookup = fixtureList.filter(x=> x._id === predictionItem._id);
+      console.log("Fixture ", fixtureLookup[0]._id, " homeGoals = ", fixtureLookup[0].homeGoals, "awayGoals = ", fixtureLookup[0].awayGoals);
+      var newPredictionItem = {};
+      newPredictionItem._id = predictionItem._id;
+      newPredictionItem.homeTeam = predictionItem.homeTeam;
+      newPredictionItem.awayTeam = predictionItem.awayTeam;
+      newPredictionItem.homePrediction = predictionItem.homePrediction;
+      newPredictionItem.awayPrediction = predictionItem.awayPrediction;
+      newPredictionItem.joker = predictionItem.joker;
+      newPredictionItem.homeGoals = fixtureLookup[0].homeGoals;
+      newPredictionItem.awayGoals = fixtureLookup[0].awayGoals;
+      newPredictionItem.points = calcMatchScore(newPredictionItem);
+      roundScore += newPredictionItem.points;
+      console.log("newPredictionItem", newPredictionItem);
+      newUserItem.predictions.push(newPredictionItem);
+    })
+    console.log("modified predictionItem is ", newUserItem);
+    Prediction.findOneAndUpdate({_id : newUserItem._id},newUserItem, function (err, doc) {
+      if (err) {
+        console.log(err);
+        return err;
+    } else {
+      console.log("successfully saved prediction", doc);
+    }
+    });
+    callback(null, currentRound, userItem.email, roundScore);
+  });
+}
 
   function getSysparms(callback) {
-    Sysparms.findOne({}).lean().exec(function (err, sysparms) {
-      console.log("In getSysparms callback");
-      if (err) return console.error(err);
-      console.log(sysparms);
-      var round = sysparms.currentRound;
-      console.log("round is ", round);
-      callback(null, round);
-    });
+    if (process.argv[2] == null) {
+      console.log("Using currentRound from sysparms");
+      Sysparms.findOne({}).lean().exec(function (err, sysparms) {
+        console.log("In getSysparms callback");
+        if (err) return console.error(err);
+        console.log(sysparms);
+        var round = sysparms.currentRound;
+      });
+    } else {
+      console.log("Using currentRound from command line");
+      var round = Number(process.argv[2]);
+    }
+    console.log(`round is ${round}`);
+    callback(null, round);
   };
 
   function getFixtures(currentRound, callback) {

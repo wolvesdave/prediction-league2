@@ -9,7 +9,7 @@ var Account = new Schema({
     password: String,
     email : String,
     totalScore : {type: Number, default:0},
-    weeklyScore : [ {score : Number} ],
+    weeklyScore : [ {round : Number, score : Number} ],
     monthlyScore : [
       { month : String,
       score : Number }

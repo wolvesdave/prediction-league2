@@ -18,12 +18,13 @@ const uri = "mongodb://localhost:27017";
 const client = new MongoClient(uri);
 client.connect(err => {
 // MongoClient.connect('mongodb://localhost:27017', function(err, client) {
-  if (process.argv[2] == null || process.argv[2] == null ) {
-    console.log("Usage: loadFixtures.js <start date> <end date> date = YYYY-MM-DD");
+  if (process.argv[2] == null || process.argv[3] == null ) {
+    console.log("Usage: loadFixtures.js <start date> <end date> in YYYY-MM-DD format");
     process.exit(1)
   } else {
     startDateString = process.argv[2];
-    endDateString = process.argv[2];
+    endDateString = process.argv[3];
+    console.log(`Using startDateString of ${startDateString} and endDateString of ${endDateString}`);
   };
 
   assert.equal(null, err);

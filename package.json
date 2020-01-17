@@ -10,6 +10,7 @@
   "author": "David Koppe <wolvesdave@gmail.com>",
   "license": "Unlicensed",
   "dependencies": {
+    "array.prototype.findindex": "git+https://github.com/paulmillr/Array.prototype.findIndex.git",
     "assert": "^1.4.1",
     "async": "^2.6.1",
     "body-parser": "^1.10.2",
@@ -36,6 +37,7 @@
     "request": "^2.85.0",
     "serve-favicon": "^2.2.0",
     "should": "~2.1.0",
+    "sleep": "^6.1.0",
     "xml2js": "^0.4.19"
   }
 }
