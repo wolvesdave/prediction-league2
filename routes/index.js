@@ -28,9 +28,17 @@ router.get('/register', function(req, res) {
 });
 
 router.post('/register', function(req, res, next) {
-    Account.register(new Account({ username : req.body.username, email : req.body.email, fullname: req.body.fullname }), req.body.password, function(err, account) {
+    Account.register(new Account({ username : req.body.username, email : req.body.email, fullname: req.body.fullname, jokers : 38}), req.body.password, function(err, account) {
         if (err) {
           return res.render('register', { error : err.message });
+        } else {
+          for (var i = 1; i <= 12; i++) {
+          account.monthlyScore.push({month:i, score:0})
+          }
+          for (var i = 0; i <= 37; i++) {
+          account.weeklyScore.push({round : i, score : 0})
+          }
+          account.save()
         }
 
         passport.authenticate('local')(req, res, function () {
@@ -238,7 +246,7 @@ router.get('/api/sysparms', function(req, res) {
 
 router.get('/api/get_scores', function(req, res) {
   console.log("In get_scores");
-  Account.find({},{_id: 0, username: 1, fullname: 1, totalScore : 1, weeklyScore : 1, monthlyScore : 1}).exec(function (err, results) {
+  Account.find({},{_id: 0, username: 1, fullname: 1, totalScore : 1, weeklyScore : 1, monthlyScore : 1, jokers : 1}).exec(function (err, results) {
     if (err) return console.error(err);
     console.log("GET scores result: ", results);
     res.send(results);

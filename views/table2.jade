@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  if (!user)
+    a(href="/login") Login
+    br
+    a(href="/register") Register
+  if (user)
+    include navbar.jade
+
+    form(ng-submit="submit()", ng-controller="tableController")
+        .form-group
+          Current round
+            input(type="number" name="round" value="#{round}" ng-model="round")
+            button(type="button" ng-click="getFixtures()") Go
+        .table
+          div(class="container")
+            div(class="row")
+              div(class="col-md-2") User Name
+              div(class="col-md-2") Name
+              div(class="col-md-2") Total Score
+          br
+          .table
+            div(class="container")
+              div(class="row")
+                tr(ng-repeat="result in results")
+                  td(class="col-md-2" type="text" name="username" value="{{ result.username }}" ng-model="result.username")
+                  td(class="col-md-2" type="text" name="name" value="{{ result.fullname }}" ng-model="result.fullname")
+                  td(class="col-md-2" type="text" name="Total Score" value="{{ result.totalScore }}" ng-model="result.totalScore")
+
+          .form-group
+            div(class="row")
+              div(class="col-lg-6")
+                input(type="text" class="form-control" name="userMessage" value="#{userMessage}" ng-model="userMessage" readonly required)
+                p #{userMessage}

@@ -8,13 +8,19 @@ var Account = new Schema({
     fullname: String,
     password: String,
     email : String,
+    jokers : Number,
     totalScore : {type: Number, default:0},
-    weeklyScore : [ {round : Number, score : Number} ],
     monthlyScore : [
       { month : String,
-      score : Number }
-     ]
-});
+      score : Number,
+      _id : false }
+    ],
+     weeklyScore : [
+       {round : Number,
+       score : Number,
+       _id : false}
+       ]
+},{ usePushEach: true });
 
 Account.plugin(passportLocalMongoose);
 

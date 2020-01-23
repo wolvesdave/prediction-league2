@@ -11,7 +11,6 @@ predictionApp.controller('tableController', ['$scope', '$filter', '$http', funct
 
     $http.get('http://localhost:3000/api/get_scores')
       .success(function (result) {
-        $scope.results = result;
+        $scope.results = result.sort((a,b) => (a.totalScore > b.totalScore) ? -1 : 1);
     });
 }]);
- 

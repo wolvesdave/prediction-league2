@@ -10,18 +10,19 @@ block content
 
     form(ng-submit="submit()", ng-controller="tableController")
         .form-group
-          Current round
+          label Current Round
             input(type="number" name="round" value="#{round}" ng-model="round")
             button(type="button" ng-click="getFixtures()") Go
         .form-group
-          div(class="container")
+          p
             div(class="row")
               div(class="col-md-2") User Name
               div(class="col-md-2") Name
               div(class="col-md-2") Total Score
+              div(class="col-md-2") Remaining Jokers
           br
           .form-group
-            div(ng-repeat="result in results" ng-submit="submit()")
+            div(ng-repeat="result in results")
               div(class="row")
                 div(class="col-md-2")
                   input(type="text" class="form-control" name="username" value="{{ result.username }}" ng-model="result.username" readonly required)
@@ -29,6 +30,8 @@ block content
                   input(type="text" class="form-control" name="name" value="{{ result.fullname }}" ng-model="result.fullname" readonly required)
                 div(class="col-md-2")
                   input(type="text" class="form-control" name="Total Score" value="{{ result.totalScore }}" ng-model="result.totalScore" readonly required)
+                div(class="col-md-2")
+                  input(type="text" class="form-control" name="Remaining jokers" value="{{ result.jokers }}" ng-model="result.jokers" readonly required)
 
           .form-group
             div(class="row")
