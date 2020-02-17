@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"prediction-league.sysparms"}],"uuid":"eb52bc06e2bf4cfb8682dd4214a65aa7"}
