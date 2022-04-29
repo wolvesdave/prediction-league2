@@ -12,7 +12,7 @@
   "dependencies": {
     "array.prototype.findindex": "git+https://github.com/paulmillr/Array.prototype.findIndex.git",
     "assert": "^1.4.1",
-    "async": "^2.6.1",
+    "async": "^2.6.4",
     "body-parser": "^1.10.2",
     "chai": "~1.8.1",
     "connect-flash": "^0.1.1",
