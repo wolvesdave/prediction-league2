@@ -24,7 +24,7 @@
     "fs": "0.0.1-security",
     "http-post": "^0.1.1",
     "jade": "^1.9.1",
-    "mocha": "~1.14.0",
+    "mocha": "~10.1.0",
     "moment": "^2.22.2",
     "mongodb": "^3.0.6",
     "mongoose": "^4.4.1",
